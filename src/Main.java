@@ -1,13 +1,22 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-void main() {
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    IO.println(String.format("Hello and welcome!"));
+public class Main{
+    public static void main(String[] args) {
+        MessageSender email = new EmailSender();
+        MessageSender telegram = new TelegramSender();
+        MessageSender sms = new SmsSender();
 
-    for (int i = 1; i <= 5; i++) {
-        //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-        // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        IO.println("i = " + i);
+        Notification urgentAlert = new UrgentNotification(email);
+        urgentAlert.send("admin@company.com", "Database connection lost!");
+
+        System.out.println("\n>> Switching channel to Telegram...");
+        urgentAlert.setSender(telegram);
+        urgentAlert.send("dev_team_lead", "Database connection lost!");
+
+        System.out.println("\n>> Switching channel to SMS...");
+        urgentAlert.setSender(sms);
+        urgentAlert.send("+1234567890", "Database connection lost!");
+
+        System.out.println("\n>> Sending Daily Digest...");
+        Notification dailyDigest = new DailyDigestNotification(telegram);
+        dailyDigest.send("john_doe", "All 12 background jobs completed successfully.");
     }
 }
